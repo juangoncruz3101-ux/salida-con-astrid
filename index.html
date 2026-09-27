@@ -131,7 +131,7 @@
 <body>
 
     <div class="card">
-        <!-- PASO 1 -->
+        <!-- PASO 1: PORTADA -->
         <div id="step1" class="step active">
             <span class="tag-step">Pregunta Seria</span>
             <div class="cat-container" id="gatoMeme">🐱👋</div>
@@ -151,7 +151,7 @@
             <button class="next-btn" onclick="irAlPaso2()">Continuar ➔</button>
         </div>
 
-        <!-- PASO 2 -->
+        <!-- PASO 2: FECHA -->
         <div id="step2" class="step">
             <span class="tag-step">Paso 1</span>
             <div class="cat-container">📅✨</div>
@@ -163,44 +163,44 @@
             <button class="next-btn" onclick="irAlPaso3()">Siguiente ➔</button>
         </div>
 
-        <!-- PASO 3 -->
+        <!-- PASO 3: COMIDA -->
         <div id="step3" class="step">
             <span class="tag-step">Paso 2</span>
             <div class="cat-container">🐱🍕</div>
             <h2>¿Qué se te antoja comer?</h2>
             <div class="grid-options">
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Pizza 🍕')"><span>🍕</span>pizza</div>
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Japonesa 🍣')"><span>🍣</span>japonesa</div>
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Tacos 🌮')"><span>🌮</span>tacos</div>
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Burgers 🍔')"><span>🍔</span>burger</div>
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Pasta 🍝')"><span>🍝</span>pasta</div>
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Coreana 🍜')"><span>🍜</span>coreana</div>
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Postre 🧁')"><span>🧁</span>postre</div>
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Café 22')"><span>☕</span>café</div>
-                <div class="option-box" onclick="selectItem(this, 'comida', 'Brunch 🥞')"><span>🥞</span>brunch</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Pizza 🍕')"><span>🍕</span>pizza</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Japonesa 🍣')"><span>🍣</span>japonesa</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Tacos 🌮')"><span>🌮</span>tacos</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Burgers 🍔')"><span>🍔</span>burger</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Pasta 🍝')"><span>🍝</span>pasta</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Coreana 🍜')"><span>🍜</span>coreana</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Postre 🧁')"><span>🧁</span>postre</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Café ☕')"><span>☕</span>café</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Brunch 🥞')"><span>🥞</span>brunch</div>
             </div>
             <div class="alerta-error" id="errorComida">⚠️ Por favor, elige una opción de comida antes de avanzar.</div>
             <button class="next-btn" onclick="validarPaso3()">Siguiente ➔</button>
         </div>
 
-        <!-- PASO 4 -->
+        <!-- PASO 4: BEBIDAS -->
         <div id="step4" class="step">
             <span class="tag-step">Paso 3</span>
             <div class="cat-container">🐱🥂</div>
             <h2>¿Y para tomar? 🥂</h2>
             <div class="grid-options">
-                <div class="option-box" onclick="selectItem(this, 'bebida', 'Vinos 🍷')"><span>🍷</span>Vinos</div>
-                <div class="option-box" onclick="selectItem(this, 'bebida', 'Cerveza 🍺')"><span>🍺</span>Cerveza</div>
-                <div class="option-box" onclick="selectItem(this, 'bebida', 'Trago/Cóctel 🍹')"><span>🍹</span>Trago</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Vinos 🍷')"><span>🍷</span>Vinos</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Cerveza 🍺')"><span>🍺</span>Cerveza</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Trago/Cóctel 🍹')"><span>🍹</span>Trago</div>
                 <div class="option-box" onclick="selectItem(this, 'bebida', 'Sake 🍶')"><span>🍶</span>Sake</div>
-                <div class="option-box" onclick="selectItem(this, 'bebida', 'Soju 🍾')"><span>🍾</span>Soju</div>
-                <div class="option-box" onclick="selectItem(this, 'bebida', 'Cualquier otra 🥤')"><span>🥤</span>Cualquier otra</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Soju 🍾')"><span>🍾</span>Soju</div>
+                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Cualquier otra 🥤')"><span>🥤</span>Cualquier otra</div>
             </div>
             <div class="alerta-error" id="errorBebida">⚠️ Por favor, elige una opción de bebida antes de confirmar.</div>
             <button class="next-btn" onclick="validarPaso4()">Confirmar Plan ➔</button>
         </div>
 
-        <!-- PASO 5 -->
+        <!-- PASO 5: RESUMEN -->
         <div id="step5" class="step">
             <span class="tag-step">Confirmado</span>
             <div class="cat-container">🐱🚗💨</div>
@@ -234,9 +234,3 @@
             gato.innerText = gatosVideo[clickNo % gatosVideo.length];
             const x = Math.random() * (window.innerWidth - 120);
             const y = Math.random() * (window.innerHeight - 80);
-            btnNo.style.position = "fixed";
-            btnNo.style.left = x + "px";
-            btnNo.style.top = y + "px";
-        }
-
-
