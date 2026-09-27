@@ -1,1 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Salimos? 💛</title>
+    <style>
+        body {
+            background-color: #b4c6fc;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        .card {
+            background: #fffdf0;
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            border: 3px solid #000;
+            box-sizing: border-box;
+        }
+        .tag-step {
+            background: #ffe6a3;
+            border: 2px solid #000;
+            border-radius: 15px;
+            display: inline-block;
+            padding: 4px 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        h2 { color: #000; font-size: 1.4rem; margin: 10px 0; line-height: 1.3; }
+        p { font-size: 1.05rem; color: #333; }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 25px;
+            height: 90px;
+            position: relative;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 15px;
+            border: 2px solid #000;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px #000;
+        }
+        #btnSi { background-color: #a3fca3; color: #000; }
+        #btnNo { background-color: #fca3a3; color: #000; position: absolute; transition: all 0.1s ease; }
+        
+        .step { display: none; }
+        .step.active { display: block; }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: 2px solid #000;
+            font-size: 1rem;
+            font-weight: bold;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .next-btn { background-color: #ffe600; color: #000; margin-top: 20px; width: 100%; box-shadow: 3px 3px 0px #000; }
+        .cat-container { font-size: 70px; margin: 15px 0; }
+        
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .option-box {
+            background: white;
+            border: 2px solid #000;
+            border-radius: 12px;
+            padding: 10px 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 2px 2px 0px #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            user-select: none;
+        }
+        .option-box span { font-size: 1.6rem; }
+        .option-box.selected {
+            background: #b4c6fc;
+            box-shadow: 1px 1px 0px #000;
+            transform: translate(1px, 1px);
+        }
+        
+        .alerta-error {
+            color: #d93838;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .resumen-box {
+            background: #ffe6a3;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #000;
+            text-align: left;
+            margin: 20px 0;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- PASO 1 -->
+        <div id="step1" class="step active">
+            <span class="tag-step">Pregunta Seria</span>
+            <div class="cat-container" id="gatoMeme">🐱👋</div>
+            <h2>¿Quieres acompañarme a hacer algo divertido juntos?</h2>
+            <div class="btn-container">
+                <button id="btnSi" onclick="irAlPasoIntermedio()">Sí</button>
+                <button id="btnNo" style="right: 40px;" onclick="accionNo()" onmouseover="accionNo()">No</button>
+            </div>
+        </div>
+
+        <!-- PASO INTERMEDIO -->
+        <div id="stepIntermedio" class="step">
+            <span class="tag-step">Momento Emotivo</span>
+            <div class="cat-container">✨😻✨</div>
+            <h2>¡Genial! sabía que dirías que si <br>(si no te raptaba xD)</h2>
+            <p style="font-size: 2.5rem; margin: 15px 0;">✨😁👉👈💛✨</p>
+            <button class="next-btn" onclick="irAlPaso2()">Continuar ➔</button>
+        </div>
+
+        <!-- PASO 2 -->
+        <div id="step2" class="step">
+            <span class="tag-step">Paso 1</span>
+            <div class="cat-container">📅✨</div>
+            <h2>¡Listo! El plan principal lo armo yo...</h2>
+            <p>Pero tú elige las siguientes opciones:</p>
+            <p style="font-weight: bold;">1 - Elige el día y la hora:</p>
+            <input type="date" id="fechaCita" min="2026-10-01" value="2026-10-01">
+            <input type="time" id="horaCita" value="20:00">
+            <button class="next-btn" onclick="irAlPaso3()">Siguiente ➔</button>
+        </div>
+
+        <!-- PASO 3 -->
+        <div id="step3" class="step">
+            <span class="tag-step">Paso 2</span>
+            <div class="cat-container">🐱🍕</div>
+            <h2>¿Qué se te antoja comer?</h2>
+            <div class="grid-options">
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Pizza 🍕')"><span>🍕</span>pizza</div>
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Japonesa 🍣')"><span>🍣</span>japonesa</div>
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Tacos 🌮')"><span>🌮</span>tacos</div>
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Burgers 🍔')"><span>🍔</span>burger</div>
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Pasta 🍝')"><span>🍝</span>pasta</div>
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Coreana 🍜')"><span>🍜</span>coreana</div>
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Postre 🧁')"><span>🧁</span>postre</div>
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Café 22')"><span>☕</span>café</div>
+                <div class="option-box" onclick="selectItem(this, 'comida', 'Brunch 🥞')"><span>🥞</span>brunch</div>
+            </div>
+            <div class="alerta-error" id="errorComida">⚠️ Por favor, elige una opción de comida antes de avanzar.</div>
+            <button class="next-btn" onclick="validarPaso3()">Siguiente ➔</button>
+        </div>
+
+        <!-- PASO 4 -->
+        <div id="step4" class="step">
+            <span class="tag-step">Paso 3</span>
+            <div class="cat-container">🐱🥂</div>
+            <h2>¿Y para tomar? 🥂</h2>
+            <div class="grid-options">
+                <div class="option-box" onclick="selectItem(this, 'bebida', 'Vinos 🍷')"><span>🍷</span>Vinos</div>
+                <div class="option-box" onclick="selectItem(this, 'bebida', 'Cerveza 🍺')"><span>🍺</span>Cerveza</div>
+                <div class="option-box" onclick="selectItem(this, 'bebida', 'Trago/Cóctel 🍹')"><span>🍹</span>Trago</div>
+                <div class="option-box" onclick="selectItem(this, 'bebida', 'Sake 🍶')"><span>🍶</span>Sake</div>
+                <div class="option-box" onclick="selectItem(this, 'bebida', 'Soju 🍾')"><span>🍾</span>Soju</div>
+                <div class="option-box" onclick="selectItem(this, 'bebida', 'Cualquier otra 🥤')"><span>🥤</span>Cualquier otra</div>
+            </div>
+            <div class="alerta-error" id="errorBebida">⚠️ Por favor, elige una opción de bebida antes de confirmar.</div>
+            <button class="next-btn" onclick="validarPaso4()">Confirmar Plan ➔</button>
+        </div>
+
+        <!-- PASO 5 -->
+        <div id="step5" class="step">
+            <span class="tag-step">Confirmado</span>
+            <div class="cat-container">🐱🚗💨</div>
+            <h2>¡Trato hecho, Astrid! 🎉</h2>
+            <p>Nuestra salida quedó registrada con tus opciones:</p>
+            <div class="resumen-box">
+                📅 Fecha: <span id="resumenFecha"></span><br>
+                ⏰ Hora: <span id="resumenHora"></span><br>
+                🍕 Comida: <span id="resumenComida"></span><br>
+                🥂 Bebida: <span id="resumenBebida"></span>
+            </div>
+            <p style="font-size: 1.2rem; font-weight: bold; color: #000; margin: 20px 0;">Listo, nos vemos ese día, Astrid :D</p>
+            <p style="font-size: 0.85rem; color: #666; font-style: italic;">¡Tómale captura a esta pantalla y envíamelo! 😉💛</p>
+        </div>
+    </div>
+
+    <script>
+        let tamanoSi = 1;
+        let clickNo = 0;
+        let comidaSeleccionada = "";
+        let bebidaSeleccionada = "";
+        const gatosVideo = ["🐱👓", "🙀", "😾", "😭", "🐈🐾"];
+
+        function accionNo() {
+            clickNo++;
+            const btnNo = document.getElementById('btnNo');
+            const btnSi = document.getElementById('btnSi');
+            const gato = document.getElementById('gatoMeme');
+            tamanoSi += 0.35;
+            btnSi.style.transform = "scale(" + tamanoSi + ")";
+            gato.innerText = gatosVideo[clickNo % gatosVideo.length];
+            const x = Math.random() * (window.innerWidth - 120);
+            const y = Math.random() * (window.innerHeight - 80);
+            btnNo.style.position = "fixed";
+            btnNo.style.left = x + "px";
+            btnNo.style.top = y + "px";
+        }
+
 
