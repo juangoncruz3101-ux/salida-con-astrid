@@ -6,7 +6,7 @@
     <title>¿Salimos? 💛</title>
     <style>
         body {
-            background-color: #b4c6fc;
+            background-color: #b4c6fc; /* Fondo azul/morado del video */
             font-family: sans-serif;
             margin: 0;
             padding: 20px;
@@ -66,7 +66,7 @@
         .step { display: none; }
         .step.active { display: block; }
         
-        input {
+        input, select {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
@@ -77,9 +77,16 @@
             box-sizing: border-box;
             background-color: white;
         }
+        .hint-hora {
+            font-size: 0.8rem;
+            color: #666;
+            margin: -4px 0 8px 0;
+            text-align: left;
+        }
         .next-btn { background-color: #ffe600; color: #000; margin-top: 20px; width: 100%; box-shadow: 3px 3px 0px #000; }
         .cat-container { font-size: 70px; margin: 15px 0; }
         
+        /* Cuadrículas de opciones */
         .grid-options {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -100,31 +107,12 @@
             align-items: center;
             gap: 5px;
             user-select: none;
+            transition: transform 0.1s;
         }
         .option-box span { font-size: 1.6rem; }
-        .option-box.selected {
+        .option-box:active {
             background: #b4c6fc;
-            box-shadow: 1px 1px 0px #000;
-            transform: translate(1px, 1px);
-        }
-        
-        .alerta-error {
-            color: #d93838;
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            display: none;
-        }
-        
-        .resumen-box {
-            background: #ffe6a3;
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px solid #000;
-            text-align: left;
-            margin: 20px 0;
-            font-weight: bold;
-            line-height: 1.6;
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -142,7 +130,7 @@
             </div>
         </div>
 
-        <!-- PASO INTERMEDIO -->
+        <!-- PASO INTERMEDIO: REACCIÓN AL SÍ -->
         <div id="stepIntermedio" class="step">
             <span class="tag-step">Momento Emotivo</span>
             <div class="cat-container">✨😻✨</div>
@@ -151,86 +139,247 @@
             <button class="next-btn" onclick="irAlPaso2()">Continuar ➔</button>
         </div>
 
-        <!-- PASO 2: FECHA -->
+        <!-- PASO 2: SELECCIÓN DE FECHA -->
         <div id="step2" class="step">
             <span class="tag-step">Paso 1</span>
             <div class="cat-container">📅✨</div>
             <h2>¡Listo! El plan principal lo armo yo...</h2>
             <p>Pero tú elige las siguientes opciones:</p>
             <p style="font-weight: bold;">1 - Elige el día y la hora:</p>
-            <input type="date" id="fechaCita" min="2026-10-01" value="2026-10-01">
-            <input type="time" id="horaCita" value="20:00">
+            
+            <input type="date" id="fechaCita" min="2026-10-01" value="2026-10-01" onchange="actualizarRestriccionesHora()">
+            <select id="horaCita"></select>
+            <p class="hint-hora" id="hintHora">Horario disponible: lunes a viernes 8pm-12am, sábado 3pm-12am, domingo todo el día. (8 de octubre es feriado: todo el día disponible)</p>
+            
             <button class="next-btn" onclick="irAlPaso3()">Siguiente ➔</button>
         </div>
 
-        <!-- PASO 3: COMIDA -->
+        <!-- PASO 3: SELECCIÓN DE COMIDA (Al tocar una casilla avanza automáticamente) -->
         <div id="step3" class="step">
             <span class="tag-step">Paso 2</span>
             <div class="cat-container">🐱🍕</div>
             <h2>¿Qué se te antoja comer?</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">(Toca tu opción favorita para avanzar)</p>
             <div class="grid-options">
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Pizza 🍕')"><span>🍕</span>pizza</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Japonesa 🍣')"><span>🍣</span>japonesa</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Tacos 🌮')"><span>🌮</span>tacos</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Burgers 🍔')"><span>🍔</span>burger</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Pasta 🍝')"><span>🍝</span>pasta</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Coreana 🍜')"><span>🍜</span>coreana</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Postre 🧁')"><span>🧁</span>postre</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Café ☕')"><span>☕</span>café</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'comida', 'Brunch 🥞')"><span>🥞</span>brunch</div>
+                <div class="option-box" onclick="irAlPaso4('🍕')"><span>🍕</span>pizza</div>
+                <div class="option-box" onclick="irAlPaso4('🍣')"><span>🍣</span>japonesa</div>
+                <div class="option-box" onclick="irAlPaso4('🌮')"><span>🌮</span>tacos</div>
+                <div class="option-box" onclick="irAlPaso4('🍔')"><span>🍔</span>burger</div>
+                <div class="option-box" onclick="irAlPaso4('🍝')"><span>🍝</span>pasta</div>
+                <div class="option-box" onclick="irAlPaso4('🍜')"><span>🍜</span>coreana</div>
+                <div class="option-box" onclick="irAlPaso4('🧁')"><span>🧁</span>postre</div>
+                <div class="option-box" onclick="irAlPaso4('☕')"><span>☕</span>café</div>
+                <div class="option-box" onclick="irAlPaso4('🥞')"><span>🥞</span>brunch</div>
             </div>
-            <div class="alerta-error" id="errorComida">⚠️ Por favor, elige una opción de comida antes de avanzar.</div>
-            <button class="next-btn" onclick="validarPaso3()">Siguiente ➔</button>
         </div>
 
-        <!-- PASO 4: BEBIDAS -->
+        <!-- PASO 4: SELECCIÓN DE BEBIDAS (Al tocar una casilla va al paso final) -->
         <div id="step4" class="step">
             <span class="tag-step">Paso 3</span>
             <div class="cat-container">🐱🥂</div>
             <h2>¿Y para tomar? 🥂</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">(Toca tu opción favorita para avanzar)</p>
             <div class="grid-options">
-                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Vinos 🍷')"><span>🍷</span>Vinos</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Cerveza 🍺')"><span>🍺</span>Cerveza</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Trago/Cóctel 🍹')"><span>🍹</span>Trago</div>
-                <div class="option-box" onclick="selectItem(this, 'bebida', 'Sake 🍶')"><span>🍶</span>Sake</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Soju 🍾')"><span>🍾</span>Soju</div>
-                <div class="option-box" onclick="seleccionarItem(this, 'bebida', 'Cualquier otra 🥤')"><span>🥤</span>Cualquier otra</div>
+                <div class="option-box" onclick="irAlPasoFinal('🍷')"><span>🍷</span>Vinos</div>
+                <div class="option-box" onclick="irAlPasoFinal('🍺')"><span>🍺</span>Cerveza</div>
+                <div class="option-box" onclick="irAlPasoFinal('🍹')"><span>🍹</span>Trago</div>
+                <div class="option-box" onclick="irAlPasoFinal('🍶')"><span>🍶</span>Sake</div>
+                <div class="option-box" onclick="irAlPasoFinal('🍾')"><span>🍾</span>Soju</div>
+                <div class="option-box" onclick="irAlPasoFinal('🥤')"><span>🥤</span>Cualquier otra</div>
             </div>
-            <div class="alerta-error" id="errorBebida">⚠️ Por favor, elige una opción de bebida antes de confirmar.</div>
-            <button class="next-btn" onclick="validarPaso4()">Confirmar Plan ➔</button>
         </div>
 
-        <!-- PASO 5: RESUMEN -->
+        <!-- PASO 5: LA ÚLTIMA VENTANA FIJA SEGURA -->
         <div id="step5" class="step">
             <span class="tag-step">Confirmado</span>
-            <div class="cat-container">🐱🚗💨</div>
+            <div class="cat-container" id="gatoFinal">🐱🚗💨</div>
             <h2>¡Trato hecho, Astrid! 🎉</h2>
-            <p>Nuestra salida quedó registrada con tus opciones:</p>
-            <div class="resumen-box">
-                📅 Fecha: <span id="resumenFecha"></span><br>
-                ⏰ Hora: <span id="resumenHora"></span><br>
-                🍕 Comida: <span id="resumenComida"></span><br>
-                🥂 Bebida: <span id="resumenBebida"></span>
+            <p>¡Nuestra salida ha sido agendada con éxito!</p>
+            
+            <div style="background: #ffe6a3; padding: 15px; border-radius: 12px; border: 2px solid #000; font-weight: bold; margin: 20px 0;">
+                💛 ¡Todo listo para vernos ese día! 💛
             </div>
-            <p style="font-size: 1.2rem; font-weight: bold; color: #000; margin: 20px 0;">Listo, nos vemos ese día, Astrid :D</p>
-            <p style="font-size: 0.85rem; color: #666; font-style: italic;">¡Tómale captura a esta pantalla y envíamelo! 😉💛</p>
+            
+            <p id="mensajeFinal" style="font-size: 1.2rem; font-weight: bold; color: #000; margin: 20px 0;">Listo, nos vemos ese día 😉</p>
+            <p style="font-size: 0.9rem; color: #555; margin-top: 25px; font-style: italic;">¡Tómale captura a esta pantalla y envíamelo por mensaje! 😉🔥</p>
         </div>
     </div>
 
     <script>
         let tamanoSi = 1;
         let clickNo = 0;
-        let comidaSeleccionada = "";
-        let bebidaSeleccionada = "";
         const gatosVideo = ["🐱👓", "🙀", "😾", "😭", "🐈🐾"];
+
+        // Datos elegidos por Astrid, se van guardando a medida que avanza
+        let emojiComida = "";
+        let emojiBebida = "";
+        let fechaFormateada = "";
+        let horaFormateada = "";
 
         function accionNo() {
             clickNo++;
             const btnNo = document.getElementById('btnNo');
             const btnSi = document.getElementById('btnSi');
             const gato = document.getElementById('gatoMeme');
+            
             tamanoSi += 0.35;
             btnSi.style.transform = "scale(" + tamanoSi + ")";
             gato.innerText = gatosVideo[clickNo % gatosVideo.length];
+            
             const x = Math.random() * (window.innerWidth - 120);
             const y = Math.random() * (window.innerHeight - 80);
+            
+            btnNo.style.position = "fixed";
+            btnNo.style.left = x + "px";
+            btnNo.style.top = y + "px";
+        }
+
+        function irAlPasoIntermedio() {
+            document.getElementById('btnNo').style.position = "absolute"; 
+            nextStep('stepIntermedio');
+        }
+
+        function irAlPaso2() {
+            nextStep('step2');
+            actualizarRestriccionesHora();
+        }
+
+        function pad(n) {
+            return n < 10 ? "0" + n : "" + n;
+        }
+
+        // Convierte minutos-del-día a texto tipo "8:00 pm"
+        function formatoAmPm(horas, minutos) {
+            const sufijo = horas >= 12 ? "pm" : "am";
+            let h12 = horas % 12;
+            if (h12 === 0) h12 = 12;
+            return h12 + ":" + pad(minutos) + " " + sufijo;
+        }
+
+        // Genera la lista de horarios válidos (cada 30 min) según el día de la semana
+        function generarHorasDisponibles(dia) {
+            let inicioMin, finMin;
+
+            if (dia >= 1 && dia <= 5) {
+                // Lunes a viernes: 8:00 pm a 12:00 am
+                inicioMin = 20 * 60;
+                finMin = 23 * 60 + 30;
+            } else if (dia === 6) {
+                // Sábado: 3:00 pm a 12:00 am
+                inicioMin = 15 * 60;
+                finMin = 23 * 60 + 30;
+            } else {
+                // Domingo: todo el día
+                inicioMin = 0;
+                finMin = 23 * 60 + 30;
+            }
+
+            const opciones = [];
+            for (let m = inicioMin; m <= finMin; m += 30) {
+                const h = Math.floor(m / 60);
+                const mm = m % 60;
+                opciones.push({
+                    valor: pad(h) + ":" + pad(mm),
+                    etiqueta: formatoAmPm(h, mm)
+                });
+            }
+            return opciones;
+        }
+
+        // Rellena el <select> de horas solo con las opciones válidas para el día elegido
+        function actualizarRestriccionesHora() {
+            try {
+                const fechaInput = document.getElementById('fechaCita').value;
+                const selectHora = document.getElementById('horaCita');
+                if (!fechaInput || !selectHora) return;
+
+                const partes = fechaInput.split('-');
+                const fechaObj = new Date(partes[0], partes[1] - 1, partes[2]);
+                let dia = fechaObj.getDay(); // 0 = domingo, 1-5 = lunes a viernes, 6 = sábado
+
+                // Excepción: 8 de octubre de 2026 es feriado, se trata como domingo (todo el día)
+                const esFeriado = (fechaInput === '2026-10-08');
+                if (esFeriado) {
+                    dia = 0;
+                }
+
+                const valorPrevio = selectHora.value;
+                const opciones = generarHorasDisponibles(dia);
+
+                selectHora.innerHTML = "";
+                opciones.forEach(function(op) {
+                    const el = document.createElement('option');
+                    el.value = op.valor;
+                    el.textContent = op.etiqueta;
+                    selectHora.appendChild(el);
+                });
+
+                // Si la hora que tenía elegida sigue siendo válida para el nuevo día, la mantenemos
+                const sigueSiendoValida = opciones.some(function(op) { return op.valor === valorPrevio; });
+                if (sigueSiendoValida) {
+                    selectHora.value = valorPrevio;
+                }
+            } catch (e) {
+                // Si algo falla, no bloqueamos el flujo de la página
+            }
+        }
+
+        function irAlPaso3() {
+            // Guardamos la fecha y hora elegidas por Astrid, con manejo de errores
+            // para que nunca se rompa el flujo si algo sale raro con el formato.
+            try {
+                const fechaInput = document.getElementById('fechaCita').value; // formato: YYYY-MM-DD
+                if (fechaInput) {
+                    const partes = fechaInput.split('-');
+                    const fechaObj = new Date(partes[0], partes[1] - 1, partes[2]);
+                    fechaFormateada = fechaObj.toLocaleDateString('es-ES', {
+                        weekday: 'long',
+                        day: 'numeric',
+                        month: 'long'
+                    });
+                }
+            } catch (e) {
+                fechaFormateada = document.getElementById('fechaCita').value || "ese día";
+            }
+
+            try {
+                horaFormateada = document.getElementById('horaCita').value || "";
+            } catch (e) {
+                horaFormateada = "";
+            }
+
+            nextStep('step3');
+        }
+
+        function irAlPaso4(emoji) {
+            emojiComida = emoji;
+            nextStep('step4');
+        }
+
+        function irAlPasoFinal(emoji) {
+            emojiBebida = emoji;
+            // Reemplaza el emoji de la pantalla final por los elegidos por Astrid
+            document.getElementById('gatoFinal').innerText = emojiComida + emojiBebida;
+
+            // Reemplaza el mensaje final con la fecha y hora elegidas
+            let mensaje = "Listo, nos vemos";
+            if (fechaFormateada) mensaje += " el " + fechaFormateada;
+            if (horaFormateada) mensaje += " a las " + horaFormateada;
+            mensaje += " 😉";
+            document.getElementById('mensajeFinal').innerText = mensaje;
+
+            nextStep('step5');
+        }
+
+        function nextStep(stepId) {
+            document.querySelectorAll('.step').forEach(function(step) {
+                step.classList.remove('active');
+            });
+            document.getElementById(stepId).classList.add('active');
+        }
+
+        // Rellenamos el selector de horas con el rango válido para la fecha por defecto
+        actualizarRestriccionesHora();
+    </script>
+</body>
+</html>
